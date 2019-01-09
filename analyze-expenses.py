@@ -4,7 +4,7 @@ import csv
 import logging
 
 def main():
-    importCsv('expense-log.csv')
+    importCsv('expense-log-2019-01-09.csv')
 
 def importCsv(filePath):
     with open(filePath, mode='r') as csv_file:
@@ -19,10 +19,11 @@ def importCsv(filePath):
                 row["Withdrawal Amount"],
                 row["Deposit Amount"],
                 row["Description"],
-                row["Account Description"],
-                row["Category Tags"],
+                row["Category"],
                 row["Payment Method"],
-                row["Merchant Type"])
+                row["Account"],
+                row["Merchant Type"],
+                row["Account Description"])
             entry.print()
             line_count += 1
         print(f'Processed {line_count} entries.')
@@ -37,20 +38,22 @@ class ExpenseEntry:
         withdrawalAmount,
         depositAmount,
         description,
-        accountDescription,
         categoryTags,
         paymentMethod,
-        merchantType):
+        account,
+        merchantType,
+        accountDescription):
 
         self._transactionDate = transactionDate
         self._dateProcessed = dateProcessed
         self._withdrawalAmount = withdrawalAmount
         self._depositAmount = depositAmount
         self._description = description
-        self._accountDescription = accountDescription
         self._categoryTags = categoryTags
         self._paymentMethod = paymentMethod
+        self._account = account
         self._merchantType = merchantType
+        self._accountDescription = accountDescription
 
     @property
     def transactionDate(self):
@@ -73,20 +76,24 @@ class ExpenseEntry:
         return self._description
 
     @property
-    def accountDescription(self):
-        return self._accountDescription
-
-    @property
     def categoryTags(self):
         return self._categoryTags
 
     @property
     def paymentMethod(self):
         return self._paymentMethod
+
+    @property
+    def account(self):
+        return self._account
     
     @property
     def merchantType(self):
         return self._merchantType
+
+    @property
+    def accountDescription(self):
+        return self._accountDescription
 
     def print(self):
         message = (
@@ -94,6 +101,7 @@ class ExpenseEntry:
             "Description: " + self.description + "\n"
             "Withdrawal Amount: " + self.withdrawalAmount + "\n"
             "Payment Method: " + self.paymentMethod + "\n"
+            "Account: " + self.account + "\n"
             "Merchant Type: " + self.merchantType + "\n"
             "CategoryTags: " + self.categoryTags + "\n"
             "--------------------------------------------------"
