@@ -2,6 +2,8 @@
 
 import csv
 import logging
+from datetime import datetime
+from decimal import Decimal
 
 def main():
     importCsv('expense-log-2019-01-09.csv')
@@ -38,18 +40,34 @@ class ExpenseEntry:
         withdrawalAmount,
         depositAmount,
         description,
-        categoryTags,
+        category,
         paymentMethod,
         account,
         merchantType,
         accountDescription):
 
-        self._transactionDate = transactionDate
-        self._dateProcessed = dateProcessed
-        self._withdrawalAmount = withdrawalAmount
-        self._depositAmount = depositAmount
+        if transactionDate:
+            self._transactionDate = datetime.strptime(transactionDate, '%m/%d/%y')
+        else:
+            self._transactionDate = None
+
+        if dateProcessed:
+            self._dateProcessed = datetime.strptime(dateProcessed, '%m/%d/%y') 
+        else:
+            self._dateProcessed = None
+        
+        if withdrawalAmount:
+            self._withdrawalAmount = Decimal(withdrawalAmount.strip('$').replace(',', ''))
+        else:
+            self._withdrawalAmount = None
+
+        if depositAmount:
+            self._depositAmount = Decimal(depositAmount.strip('$').replace(',', ''))
+        else:
+            self._depositAmount = None
+            
         self._description = description
-        self._categoryTags = categoryTags
+        self._category = category
         self._paymentMethod = paymentMethod
         self._account = account
         self._merchantType = merchantType
@@ -76,8 +94,8 @@ class ExpenseEntry:
         return self._description
 
     @property
-    def categoryTags(self):
-        return self._categoryTags
+    def category(self):
+        return self._category
 
     @property
     def paymentMethod(self):
@@ -97,13 +115,13 @@ class ExpenseEntry:
 
     def print(self):
         message = (
-            "Transaction Date: " + self.transactionDate + "\n"
+            "Transaction Date: " + self.transactionDate.strftime('%m/%d/%y') + "\n"
             "Description: " + self.description + "\n"
-            "Withdrawal Amount: " + self.withdrawalAmount + "\n"
+            "Withdrawal Amount: $" + str(self.withdrawalAmount) + "\n"
             "Payment Method: " + self.paymentMethod + "\n"
             "Account: " + self.account + "\n"
             "Merchant Type: " + self.merchantType + "\n"
-            "CategoryTags: " + self.categoryTags + "\n"
+            "Category: " + self.category + "\n"
             "--------------------------------------------------"
         )
         print(message)
