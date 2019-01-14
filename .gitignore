@@ -1,3 +1,4 @@
 expense-log*.csv
 *.sqlite
 .vscode/
+__pycache__/
