@@ -1,2 +1,3 @@
-expense-log.csv
+expense-log*.csv
+*.sqlite
 .vscode/
